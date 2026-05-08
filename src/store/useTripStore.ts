@@ -8,6 +8,8 @@ export interface Activity {
   location: string;
   isIndoor: boolean;
   coordinates: { lat: number; lng: number };
+  rating?: number;
+  topReview?: string;
 }
 
 interface TripState {

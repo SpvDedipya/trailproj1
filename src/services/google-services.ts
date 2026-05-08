@@ -14,7 +14,7 @@ export class GoogleMapsService {
         headers: {
           'Content-Type': 'application/json',
           'X-Goog-Api-Key': this.API_KEY,
-          'X-Goog-FieldMask': 'places.id,places.displayName,places.rating,places.types,places.regularOpeningHours'
+          'X-Goog-FieldMask': 'places.id,places.displayName,places.rating,places.reviews,places.userRatingCount'
         },
         body: JSON.stringify({ textQuery: query })
       });
