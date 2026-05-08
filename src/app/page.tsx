@@ -108,47 +108,49 @@ export default function OmniTraveDashboard() {
   return (
     <div className="min-h-screen bg-[#050505] text-zinc-100 font-sans selection:bg-indigo-500/30">
       <header className="border-b border-zinc-800/50 bg-black/40 backdrop-blur-xl sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+        <nav className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between" aria-label="Main Navigation">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center shadow-lg shadow-indigo-500/20">
+            <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center shadow-lg shadow-indigo-500/20" aria-hidden="true">
               <MapPin className="w-5 h-5 text-white" />
             </div>
             <span className="text-xl font-bold tracking-tight">OMNITRAVE</span>
           </div>
           <button
             onClick={exportToPDF}
-            className="flex items-center gap-2 px-4 py-2 bg-zinc-800 hover:bg-zinc-700 rounded-full text-sm transition border border-zinc-700"
+            aria-label="Export itinerary as PDF"
+            className="flex items-center gap-2 px-4 py-2 bg-zinc-800 hover:bg-zinc-700 rounded-full text-sm transition border border-zinc-700 focus-visible:ring-2 focus-visible:ring-indigo-500 outline-none"
           >
             <Download className="w-4 h-4" /> Export Itinerary
           </button>
-        </div>
+        </nav>
       </header>
 
       <main className="max-w-7xl mx-auto px-6 py-10 grid grid-cols-1 lg:grid-cols-12 gap-8">
-        <div className="lg:col-span-4 space-y-6">
-          {/* Trip Config */}
-          <section className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6 shadow-inner">
-            <h2 className="text-xs font-bold text-zinc-500 uppercase tracking-[0.2em] mb-4">Trip Configuration</h2>
+        <aside className="lg:col-span-4 space-y-6">
+          <section className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6 shadow-inner" aria-labelledby="config-title">
+            <h2 id="config-title" className="text-xs font-bold text-zinc-500 uppercase tracking-[0.2em] mb-4">Trip Configuration</h2>
             <form onSubmit={generateInitialTrip} className="space-y-4">
               <div className="space-y-2">
-                <label className="text-[10px] text-zinc-500 ml-1 uppercase">Destination</label>
+                <label htmlFor="destination" className="text-[10px] text-zinc-500 ml-1 uppercase">Destination</label>
                 <input
+                  id="destination"
                   name="destination"
                   placeholder="e.g. Hyderabad, India"
                   className="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 focus:border-indigo-500 outline-none transition text-sm"
                   value={destination}
                   onChange={e => setDestination(e.target.value)}
                   required
+                  aria-required="true"
                 />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-2">
-                  <label className="text-[10px] text-zinc-500 ml-1 uppercase">Budget</label>
-                  <input name="budget" placeholder="₹40,000" className="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 outline-none text-sm" required />
+                  <label htmlFor="budget" className="text-[10px] text-zinc-500 ml-1 uppercase">Budget</label>
+                  <input id="budget" name="budget" placeholder="₹40,000" className="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 outline-none text-sm focus-visible:border-indigo-500" required />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-[10px] text-zinc-500 ml-1 uppercase">Pace</label>
-                  <select name="pace" className="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 outline-none text-sm appearance-none">
+                  <label htmlFor="pace" className="text-[10px] text-zinc-500 ml-1 uppercase">Pace</label>
+                  <select id="pace" name="pace" className="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 outline-none text-sm appearance-none focus-visible:border-indigo-500">
                     <option>Relaxed</option>
                     <option>Moderate</option>
                     <option>Fast-Paced</option>
@@ -158,22 +160,24 @@ export default function OmniTraveDashboard() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-indigo-600 hover:bg-indigo-500 disabled:bg-zinc-800 py-3 rounded-xl font-bold transition shadow-lg shadow-indigo-500/20 active:scale-[0.98]"
+                aria-label={loading ? "Initializing engine" : "Generate initial itinerary"}
+                className="w-full bg-indigo-600 hover:bg-indigo-500 disabled:bg-zinc-800 py-3 rounded-xl font-bold transition shadow-lg shadow-indigo-500/20 active:scale-[0.98] outline-none focus-visible:ring-2 focus-visible:ring-indigo-300"
               >
                 {loading ? <RefreshCw className="w-5 h-5 animate-spin mx-auto" /> : 'INITIALIZE ENGINE'}
               </button>
             </form>
           </section>
 
-          {/* Simulation */}
-          <section className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6">
-            <h2 className="text-xs font-bold text-zinc-500 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
+          <section className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6" aria-labelledby="sim-title">
+            <h2 id="sim-title" className="text-xs font-bold text-zinc-500 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
               <Terminal className="w-4 h-4" /> Simulation Center
             </h2>
             <div className="space-y-3">
               <button
                 onClick={() => handleSimulatedPivot('RAIN')}
-                className={`w-full flex items-center justify-between p-4 rounded-xl border transition-all ${isRainMode ? 'bg-indigo-500/10 border-indigo-500 text-indigo-400' : 'bg-zinc-950 border-zinc-800'}`}
+                aria-pressed={isRainMode}
+                aria-label="Toggle heavy rain simulation"
+                className={`w-full flex items-center justify-between p-4 rounded-xl border transition-all ${isRainMode ? 'bg-indigo-500/10 border-indigo-500 text-indigo-400' : 'bg-zinc-950 border-zinc-800'} outline-none focus-visible:ring-2 focus-visible:ring-indigo-500`}
               >
                 <div className="flex items-center gap-3">
                   <CloudRain className="w-5 h-5" />
@@ -184,7 +188,9 @@ export default function OmniTraveDashboard() {
 
               <button
                 onClick={() => handleSimulatedPivot('TRAFFIC')}
-                className={`w-full flex items-center justify-between p-4 rounded-xl border transition-all ${isHeavyTraffic ? 'bg-amber-500/10 border-amber-500 text-amber-400' : 'bg-zinc-950 border-zinc-800'}`}
+                aria-pressed={isHeavyTraffic}
+                aria-label="Toggle traffic surge simulation"
+                className={`w-full flex items-center justify-between p-4 rounded-xl border transition-all ${isHeavyTraffic ? 'bg-amber-500/10 border-amber-500 text-amber-400' : 'bg-zinc-950 border-zinc-800'} outline-none focus-visible:ring-2 focus-visible:ring-amber-500`}
               >
                 <div className="flex items-center gap-3">
                   <Car className="w-5 h-5" />
@@ -195,10 +201,13 @@ export default function OmniTraveDashboard() {
             </div>
           </section>
 
-          {/* Logs */}
-          <section className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6 h-[250px] flex flex-col">
-            <h2 className="text-xs font-bold text-zinc-500 uppercase tracking-[0.2em] mb-4">Reasoning Engine</h2>
-            <div className="flex-1 overflow-y-auto space-y-3 font-mono text-[11px] text-zinc-500 scrollbar-hide">
+          <section className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6 h-[250px] flex flex-col" aria-labelledby="log-title">
+            <h2 id="log-title" className="text-xs font-bold text-zinc-500 uppercase tracking-[0.2em] mb-4">Reasoning Engine</h2>
+            <div 
+              className="flex-1 overflow-y-auto space-y-3 font-mono text-[11px] text-zinc-500 scrollbar-hide"
+              aria-live="polite"
+              role="log"
+            >
               <AnimatePresence initial={false}>
                 {reasoningLog.map((log, i) => (
                   <motion.div
@@ -207,19 +216,19 @@ export default function OmniTraveDashboard() {
                     animate={{ opacity: 1, x: 0 }}
                     className="flex gap-2 leading-relaxed"
                   >
-                    <span className="text-indigo-500 shrink-0">❯</span>
+                    <span className="text-indigo-500 shrink-0" aria-hidden="true">❯</span>
                     <span>{log}</span>
                   </motion.div>
                 ))}
               </AnimatePresence>
             </div>
           </section>
-        </div>
+        </aside>
 
-        <div className="lg:col-span-8">
-          <div className="flex items-center justify-between mb-8">
+        <article className="lg:col-span-8">
+          <header className="flex items-center justify-between mb-8">
             <div>
-              <h2 className="text-3xl font-bold tracking-tight">Dynamic Itinerary</h2>
+              <h1 className="text-3xl font-bold tracking-tight">Dynamic Itinerary</h1>
               <p className="text-zinc-500 text-sm mt-1">Real-time route optimization via Google Routes API</p>
             </div>
             {isUpdating && (
@@ -227,25 +236,27 @@ export default function OmniTraveDashboard() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 className="flex items-center gap-2 text-indigo-400 text-xs font-bold px-3 py-1 bg-indigo-500/10 rounded-full border border-indigo-500/20"
+                role="status"
               >
                 <RefreshCw className="w-3 h-3 animate-spin" />
                 PIVOTING LOGIC...
               </motion.div>
             )}
-          </div>
+          </header>
 
-          <div className="space-y-4">
+          <section className="space-y-4">
             {loading ? (
               <ItinerarySkeleton />
             ) : itinerary.length > 0 ? (
-              <div className="relative border-l-2 border-zinc-800 ml-3 pl-8 space-y-8">
-                {itinerary.map((activity, idx) => (
+              <div className="relative border-l-2 border-zinc-800 ml-3 pl-8 space-y-8" role="list">
+                {itinerary.map((activity) => (
                   <motion.div
                     layout
                     key={activity.id}
                     className="relative"
+                    role="listitem"
                   >
-                    <div className="absolute -left-[41px] top-1 w-4 h-4 bg-zinc-950 border-2 border-indigo-500 rounded-full z-10" />
+                    <div className="absolute -left-[41px] top-1 w-4 h-4 bg-zinc-950 border-2 border-indigo-500 rounded-full z-10" aria-hidden="true" />
                     <div className={`group bg-zinc-900/40 border transition-all duration-500 ${activity.isIndoor && isRainMode ? 'border-indigo-500 shadow-[0_0_20px_rgba(99,102,241,0.1)]' : 'border-zinc-800'} rounded-2xl p-6 hover:bg-zinc-800/50`}>
                       <div className="flex items-start justify-between">
                         <div className="space-y-2">
@@ -260,9 +271,12 @@ export default function OmniTraveDashboard() {
                           <h3 className="text-xl font-bold">{activity.title}</h3>
                           <p className="text-sm text-zinc-400 leading-relaxed">{activity.description}</p>
                         </div>
-                        <div className="p-2 bg-zinc-950 rounded-lg group-hover:bg-indigo-600 transition-colors">
+                        <button 
+                          aria-label={`View details for ${activity.title}`}
+                          className="p-2 bg-zinc-950 rounded-lg group-hover:bg-indigo-600 transition-colors focus-visible:ring-2 focus-visible:ring-indigo-400 outline-none"
+                        >
                           <ChevronRight className="w-5 h-5 text-zinc-700 group-hover:text-white" />
-                        </div>
+                        </button>
                       </div>
                     </div>
                   </motion.div>
@@ -270,12 +284,12 @@ export default function OmniTraveDashboard() {
               </div>
             ) : (
               <div className="h-[400px] border-2 border-dashed border-zinc-800 rounded-3xl flex flex-col items-center justify-center text-zinc-600 gap-4 bg-zinc-950/50">
-                <AlertCircle className="w-10 h-10 opacity-20" />
+                <AlertCircle className="w-10 h-10 opacity-20" aria-hidden="true" />
                 <p className="text-sm font-medium">No active itinerary. Please configure your trip.</p>
               </div>
             )}
-          </div>
-        </div>
+          </section>
+        </article>
       </main>
     </div>
   );
