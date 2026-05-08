@@ -10,9 +10,9 @@ export async function generateTravelPlan(
   weather: string,
   rainMode: boolean = false
 ): Promise<TravelPlan> {
-  const apiKey = process.env.GEMINI_API_KEY;
+  const apiKey = process.env.GOOGLE_AI_STUDIO_API_KEY;
   if (!apiKey) {
-    throw new Error('GEMINI_API_KEY is not set');
+    throw new Error('GOOGLE_AI_STUDIO_API_KEY is not set');
   }
   const genAI = new GoogleGenerativeAI(apiKey);
   const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
