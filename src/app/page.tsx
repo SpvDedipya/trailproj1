@@ -19,13 +19,7 @@ import { useTripStore } from '../store/useTripStore';
 import { TravelExperienceCoordinator } from '../engine/TravelExperienceCoordinator';
 import { handleTravelForm } from './actions/travel';
 import { jsPDF } from 'jspdf';
-
-// Temporary local Skeleton if your import fails
-const LocalSkeleton = () => (
-  <div className="space-y-4 animate-pulse">
-    {[1, 2, 3].map(i => <div key={i} className="h-32 bg-zinc-800/50 rounded-2xl" />)}
-  </div>
-);
+import { ItinerarySkeleton } from '../components/Itinerary/Skeleton';
 
 export default function OmniTraveDashboard() {
   const {
@@ -43,9 +37,6 @@ export default function OmniTraveDashboard() {
 
   const [loading, setLoading] = useState(false);
   const [destination, setDestination] = useState('');
-
-  // Instantiate the coordinator logic
-  const coordinator = useMemo(() => new TravelExperienceCoordinator(), []);
 
   const generateInitialTrip = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -81,17 +72,11 @@ export default function OmniTraveDashboard() {
     if (type === 'RAIN') toggleRain();
     if (type === 'TRAFFIC') toggleTraffic();
 
-    // Call the engine to recalculate
-    const pivotResult = await coordinator.evaluateAndPivot(type, {
-      currentItinerary: itinerary,
-      isRainy: type === 'RAIN' ? !isRainMode : isRainMode,
-      hasTraffic: type === 'TRAFFIC' ? !isHeavyTraffic : isHeavyTraffic
+    // Call the engine static method to recalculate
+    await TravelExperienceCoordinator.evaluateAndPivot(type, {
+      currentItinerary: itinerary
     });
 
-    if (pivotResult.newItinerary) {
-      setItinerary(pivotResult.newItinerary);
-      addLog(pivotResult.reasoning);
-    }
     setUpdating(false);
   };
 
@@ -251,7 +236,7 @@ export default function OmniTraveDashboard() {
 
           <div className="space-y-4">
             {loading ? (
-              <LocalSkeleton />
+              <ItinerarySkeleton />
             ) : itinerary.length > 0 ? (
               <div className="relative border-l-2 border-zinc-800 ml-3 pl-8 space-y-8">
                 {itinerary.map((activity, idx) => (
