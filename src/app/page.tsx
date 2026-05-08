@@ -56,7 +56,8 @@ export default function OmniTraveDashboard() {
         isIndoor: a.isIndoor || i % 2 === 0,
         coordinates: a.coordinates || { lat: 0, lng: 0 },
         rating: 4.5 + (Math.random() * 0.5),
-        topReview: "Absolutely amazing experience! The local culture and atmosphere here are unmatched. Highly recommend visiting early to avoid the crowds."
+        topReview: "Absolutely amazing experience! The local culture and atmosphere here are unmatched. Highly recommend visiting early to avoid the crowds.",
+        googleMapsUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(a.title || a.description.split(' - ')[0])}`
       }));
 
       setItinerary(activities);
@@ -278,6 +279,17 @@ export default function OmniTraveDashboard() {
                           </div>
                           <h3 className="text-xl font-bold">{activity.title}</h3>
                           <p className="text-sm text-zinc-400 leading-relaxed">{activity.description}</p>
+                          
+                          {activity.googleMapsUrl && (
+                            <a 
+                              href={activity.googleMapsUrl} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1.5 mt-3 text-[10px] font-bold text-indigo-400 hover:text-indigo-300 transition uppercase tracking-wider"
+                            >
+                              <MapPin className="w-3 h-3" /> View on Google Maps
+                            </a>
+                          )}
                           
                           {activity.topReview && (
                             <div className="mt-3 p-3 bg-zinc-950/50 rounded-xl border border-zinc-800/50 italic text-[11px] text-zinc-500 leading-relaxed">

@@ -10,6 +10,7 @@ export interface Activity {
   coordinates: { lat: number; lng: number };
   rating?: number;
   topReview?: string;
+  googleMapsUrl?: string;
 }
 
 interface TripState {
