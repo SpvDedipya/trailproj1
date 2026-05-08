@@ -278,7 +278,16 @@ export default function OmniTraveDashboard() {
                             )}
                           </div>
                           <h3 className="text-xl font-bold">{activity.title}</h3>
-                          <p className="text-sm text-zinc-400 leading-relaxed">{activity.description}</p>
+                          <p className="text-sm text-zinc-400 leading-relaxed mb-4">{activity.description}</p>
+                          
+                          <div className="relative w-full h-32 bg-zinc-950 rounded-xl overflow-hidden border border-zinc-800/50 mb-4 group/map">
+                            <img 
+                              src={`https://maps.googleapis.com/maps/api/staticmap?center=${activity.coordinates.lat},${activity.coordinates.lng}&zoom=14&size=600x200&scale=2&maptype=roadmap&markers=color:red%7C${activity.coordinates.lat},${activity.coordinates.lng}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}&style=feature:all|element:all|saturation:-100|invert_lightness:true`}
+                              alt={`Map location of ${activity.title}`}
+                              className="w-full h-full object-cover opacity-60 group-hover/map:opacity-100 transition-opacity duration-700"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/80 to-transparent pointer-events-none" />
+                          </div>
                           
                           {activity.googleMapsUrl && (
                             <a 
